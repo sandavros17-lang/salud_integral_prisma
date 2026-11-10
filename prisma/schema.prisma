@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql" 
+}
+
+//  url      = env("DATABASE_URL")
+
+// MÓDULO DE ESPECIALIDADES MÉDICAS
+
+model Especialidad {
+  id          Int      @id @default(autoincrement()) // Identificador único de la especialidad [PK]
+  nombre      String   @unique                       // Nombre único de la especialidad (Ej: Pediatría)
+  descripcion String?                                // Descripción opcional de la especialidad
+
+  // Relación: Una especialidad puede tener muchos médicos asignados
+  medicos     Medico[]
+
+  @@map("especialidades")
+}
+
+// MÓDULO DE MÉDICOS
+
+model Medico {
+  id                 Int      @id @default(autoincrement()) // Identificador único del médico [PK]
+  documentoIdentidad String   @unique                       // Cédula o documento de identidad único
+  nombre             String                                 // Nombre del médico
+  apellido           String                                 // Apellido del médico
+  correo             String   @unique                       // Correo electrónico institucional único
+  telefono           String                                 // Teléfono de contacto
+  estado             Boolean  @default(true)                // Estado del médico (Activo: true, Inactivo: false)
+  
+  // Llave foránea hacia la especialidad
+  especialidadId     Int                                    // ID de la especialidad [FK]
+  especialidad       Especialidad @relation(fields: [especialidadId], references: [id])
+
+  // Relaciones del médico con citas e historias clínicas
+  citas              Cita[]
+  historiasClinicas  HistoriaClinica[]
+
+  @@map("medicos")
+}
+
+
+// MÓDULO DE PACIENTES
+
+model Paciente {
+  id                 Int      @id @default(autoincrement()) // Identificador único del paciente [PK]
+  documentoIdentidad String   @unique                       // Cédula o documento único del paciente
+  nombre             String                                 // Nombre del paciente
+  apellido           String                                 // Apellido del paciente
+  fechaNacimiento    DateTime                               // Fecha de nacimiento del paciente
+  telefono           String                                 // Teléfono de contacto
+  direccion          String                                 // Dirección de residencia (en Cali / Colombia)
+  correo             String   @unique                       // Correo electrónico único
+
+  // Relaciones del paciente
+  citas              Cita[]
+  historiasClinicas  HistoriaClinica[]
+
+  @@map("pacientes")
+}
+
+
+// MÓDULO DE CITAS MÉDICAS
+
+model Cita {
+  id         Int      @id @default(autoincrement()) // Identificador único de la cita [PK]
+  fechaHora  DateTime                               // Fecha y hora programada para la cita
+  estado     String   @default("PROGRAMADA")        // Estado actual (PROGRAMADA, ATENDIDA, CANCELADA)
+  motivo     String                                 // Motivo de consulta manifestado por el paciente
+
+  // Llaves foráneas
+  pacienteId Int                                    // ID del paciente [FK]
+  paciente   Paciente @relation(fields: [pacienteId], references: [id])
+
+  medicoId   Int                                    // ID del médico [FK]
+  medico     Medico   @relation(fields: [medicoId], references: [id])
+
+  // Relaciones uno a uno con historia clínica y factura
+  historiaClinica HistoriaClinica?
+  factura         Factura?
+
+  @@map("citas")
+}
+
+
+// MÓDULO DE HISTORIAS CLÍNICAS
+
+model HistoriaClinica {
+  id            Int      @id @default(autoincrement()) // Identificador único de la historia [PK]
+  fechaCreacion DateTime @default(now())               // Fecha de registro de la atención
+  diagnostico   String                                 // Diagnóstico médico emitido
+  tratamiento   String                                 // Tratamiento o medicamentos recetados
+  observaciones String?                                // Notas u observaciones adicionales (opcional)
+
+  // Llaves foráneas y relación uno a uno estricta con la Cita
+  citaId        Int      @unique                       // ID de la cita asociada [FK] (Único 1:1)
+  cita          Cita     @relation(fields: [citaId], references: [id])
+
+  pacienteId    Int                                    // ID del paciente [FK]
+  paciente      Paciente @relation(fields: [pacienteId], references: [id])
+
+  medicoId      Int                                    // ID del médico que atiende [FK]
+  medico        Medico   @relation(fields: [medicoId], references: [id])
+
+  @@map("historias_clinicas")
+}
+
+
+// MÓDULO DE FACTURACIÓN
+
+model Factura {
+  id           Int      @id @default(autoincrement()) // Identificador único de la factura [PK]
+  fechaEmision DateTime @default(now())               // Fecha en que se emite la factura
+  valorTotal   Decimal  @db.Decimal(10, 2)             // Valor monetario total a pagar (pesos colombianos)
+  estado       String   @default("PENDIENTE")         // Estado de pago (PENDIENTE, PAGADA, ANULADA)
+
+  // Llave foránea y relación uno a uno con la Cita
+  citaId       Int      @unique                       // ID de la cita facturada [FK] (Único 1:1)
+  cita         Cita     @relation(fields: [citaId], references: [id])
+
+  @@map("facturas")
+}

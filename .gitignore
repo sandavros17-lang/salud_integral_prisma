@@ -1,0 +1,11 @@
+# Entorno y credenciales (¡Muy importante!)
+.env
+
+# Dependencias de Node.js
+node_modules/
+
+# Código compilado de TypeScript
+dist/
+
+# Cliente generado por Prisma
+generated/
