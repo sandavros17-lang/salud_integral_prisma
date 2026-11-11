@@ -10,4 +10,12 @@ app.use(express.json())
 app.use('/api', pacienteRutas)
 app.use('/api', medicoRutas)
 
+console.log('>>> Intentando arrancar el servidor...')
+import express from 'express'
+
 // ... (aquí va tu app.listen)
+
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo exitosamente en http://localhost:${PORT}`)
+})

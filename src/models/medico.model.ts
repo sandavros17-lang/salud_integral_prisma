@@ -2,15 +2,22 @@ import { prisma } from "../config/prisma.js"
 
 export const medicoModel = {
   
-  // Obtiene todos los médicos incluyendo los datos de su especialidad
-  async getAllDoctors() {
+  // Obtiene todos los médicos y opcionalmente filtra por nombre de especialidad
+  async getAllDoctors(nombreEspecialidad?: string) {
     return await prisma.medico.findMany({
+      where: nombreEspecialidad ? {
+        especialidad: {
+          nombre: {
+            contains: nombreEspecialidad,
+            mode: 'insensitive'
+          }
+        }
+      } : undefined,
       include: { especialidad: true },
       orderBy: { id: 'desc' }
     })
   },
 
-  // Busca un médico por su ID incluyendo su especialidad. Retorna null si no existe
   async getDoctorById(id: number) {
     return await prisma.medico.findUnique({
       where: { id },
@@ -18,7 +25,6 @@ export const medicoModel = {
     })
   },
 
-  // Crea un nuevo médico en la base de datos y retorna su información con la especialidad
   async createDoctor(data: any) {
     return await prisma.medico.create({
       data,
@@ -26,7 +32,6 @@ export const medicoModel = {
     })
   },
 
-  // Funciones de validación auxiliar
   async buscarPorCorreo(correo: string) {
     return await prisma.medico.findUnique({ where: { correo } })
   },

@@ -3,10 +3,15 @@ import { medicoModel } from '../models/medico.model.ts'
 
 export const medicoController = {
 
-  // GET /api/medico - Lista todos los médicos
+  // GET /api/medico - Lista todos los médicos o filtra por especialidad si viene el query param
   async listarMedicos(req: Request, res: Response) {
     try {
-      const medicos = await medicoModel.getAllDoctors()
+      // Capturamos el parámetro ?specialty= de la URL (si es que viene)
+      const especialidadFiltro = req.query.specialty as string
+
+      // Pasamos el filtro al modelo (si está vacío, traerá todos)
+      const medicos = await medicoModel.getAllDoctors(especialidadFiltro)
+
       return res.status(200).json({
         exito: true,
         datos: medicos
