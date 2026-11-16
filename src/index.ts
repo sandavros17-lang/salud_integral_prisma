@@ -9,6 +9,7 @@ import swaggerUi from 'swagger-ui-express'
 import { swaggerSpec } from './config/swagger.js'
 import especialidadRoutes from './routes/especialidad.routes'
 
+
 const app = express()
 app.use(express.json())
 
