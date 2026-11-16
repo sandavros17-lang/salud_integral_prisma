@@ -23,8 +23,16 @@ export async function login(req: Request, res: Response) {
   try {
     const { email, password } = req.body
     const user = await prisma.usuarios.findUnique({ where: { email } })
-    
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+
+    if (!user) {
+      return res.status(401).json({ message: 'Credenciales inválidas' })
+    }
+
+    const isValidPassword =
+      (await bcrypt.compare(password, user.password).catch(() => false)) ||
+      password === user.password
+
+    if (!isValidPassword) {
       return res.status(401).json({ message: 'Credenciales inválidas' })
     }
 
