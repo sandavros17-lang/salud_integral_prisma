@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { pacienteModel } from '../models/paciente.model.ts'
 
 export const pacienteController = {
-  // GET /api/pacientes
+  // GET /api/pacientes------muestra todos los pacientes de la BD
   async listarPacientes(req: Request, res: Response) {
     try {
       const pacientes = await pacienteModel.getAllPatients()
@@ -16,13 +16,13 @@ export const pacienteController = {
     }
   },
 
-  // GET /api/paciente/:id
+  // GET /api/paciente/:id-------me muestra a un paciente por el ID q se digitado
   async obtenerPacientePorId(req: Request, res: Response) {
     try {
       const id = parseInt(req.params.id as string) // asi siempre se convierte en un entero
       const paciente = await pacienteModel.getPatientById(id)
 
-      // Si no existe, retornamos 404 como pide la guía
+      // Si no existe, sale error  404 
       if (!paciente) {
         return res.status(404).json({
           exito: false,
@@ -55,7 +55,7 @@ export const pacienteController = {
         return res.status(400).json({ exito: false, mensaje: 'Ya existe un paciente con este correo' })
       }
 
-      // Usando createPatient tal como lo pide la guía
+      // Crear paciente con los datos pedidos
       const nuevoPaciente = await pacienteModel.createPatient({
         documentoIdentidad,
         correo,

@@ -6,7 +6,7 @@ const options: swaggerJsdoc.Options = {
     info: {
       title: 'API Clínica Salud Integral',
       version: '1.0.0',
-      description: 'Documentación oficial del sistema de gestión médica, citas y reportes gerenciales',
+      description: 'Documentación del sistema de gestión médica para citas y reportes gerenciales',
     },
     servers: [
       {

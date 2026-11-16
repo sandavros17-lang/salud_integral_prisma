@@ -51,8 +51,8 @@ model Medico {
 // MÓDULO DE PACIENTES
 
 model Paciente {
-  id                 Int      @id @default(autoincrement()) // Identificador único del paciente [PK]
-  documentoIdentidad String   @unique                       // Cédula o documento único del paciente
+  id                 Int      @id @default(autoincrement()) // Identificacion paciente [PK]
+  documentoIdentidad String   @unique                       // Cédula o documento del paciente
   nombre             String                                 // Nombre del paciente
   apellido           String                                 // Apellido del paciente
   fechaNacimiento    DateTime                               // Fecha de nacimiento del paciente
