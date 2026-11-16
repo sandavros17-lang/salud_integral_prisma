@@ -45,6 +45,113 @@
         }
       }
     },
+    "/especialidades": {
+      "get": {
+        "summary": "Obtener todas las especialidades",
+        "tags": ["Especialidades"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Lista de especialidades obtenida con éxito" }
+        }
+      },
+      "post": {
+        "summary": "Crear una nueva especialidad",
+        "tags": ["Especialidades"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nombre": { "type": "string", "example": "Medicina General" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Especialidad creada con éxito" },
+          "400": { "description": "Datos inválidos" }
+        }
+      }
+    },
+    "/medicos": {
+      "get": {
+        "summary": "Obtener todos los médicos",
+        "tags": ["Médicos"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Lista de médicos obtenida con éxito" }
+        }
+      },
+      "post": {
+        "summary": "Crear un nuevo médico",
+        "tags": ["Médicos"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "documentoIdentidad": { "type": "string", "example": "1001234567" },
+                  "nombre": { "type": "string", "example": "Santiago" },
+                  "apellido": { "type": "string", "example": "Rosero" },
+                  "correo": { "type": "string", "example": "santiago.rosero@clinica.com" },
+                  "telefono": { "type": "string", "example": "3001234567" },
+                  "especialidadId": { "type": "integer", "example": 1 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Médico creado con éxito" },
+          "400": { "description": "Datos inválidos" }
+        }
+      }
+    },
+    "/pacientes": {
+      "get": {
+        "summary": "Obtener todos los pacientes",
+        "tags": ["Pacientes"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Lista de pacientes obtenida con éxito" }
+        }
+      },
+      "post": {
+        "summary": "Crear un nuevo paciente",
+        "tags": ["Pacientes"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "documentoIdentidad": { "type": "string", "example": "1012345678" },
+                  "nombre": { "type": "string", "example": "Lucía" },
+                  "apellido": { "type": "string", "example": "Martínez" },
+                  "fechaNacimiento": { "type": "string", "example": "1995-05-12" },
+                  "telefono": { "type": "string", "example": "3101234567" },
+                  "direccion": { "type": "string", "example": "Calle 123 #45-67" },
+                  "correo": { "type": "string", "example": "lucia.martinez@email.com" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Paciente creado con éxito" },
+          "400": { "description": "Datos inválidos" }
+        }
+      }
+    },
     "/citas": {
       "get": {
         "summary": "Obtener todas las citas",

@@ -7,6 +7,8 @@ import citaRutas from './routes/cita.routes.js'
 import reporteRutas from './routes/reporte.routes.js'
 import swaggerUi from 'swagger-ui-express'
 import { swaggerSpec } from './config/swagger.js'
+import especialidadRoutes from './routes/especialidad.routes'
+
 
 const app = express()
 app.use(express.json())
@@ -18,6 +20,7 @@ app.use('/api/auth', authRutas)
 app.use('/api', citaRutas)
 app.use('/api', reporteRutas)
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)) //URL para ver la documentacion de swagger
+app.use('/api/especialidades', especialidadRoutes)
 
 
 

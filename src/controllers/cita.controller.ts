@@ -43,14 +43,22 @@ export async function crearCita(req: Request, res: Response) {
 export async function obtenerAgendaMedico(req: Request, res: Response) {
   try {
     const medicoId = Number(req.params.id)
+    if (isNaN(medicoId)) {
+      return res.status(400).json({ message: 'El ID del médico debe ser un número válido' })
+    }
+
     const { from, to } = req.query
 
     let fechaInicio: Date | undefined
     let fechaFin: Date | undefined
 
     if (from && to) {
-      fechaInicio = new Date(from as string)
-      fechaFin = new Date(to as string)
+      fechaInicio = new Date(String(from).trim())
+      fechaFin = new Date(String(to).trim())
+
+      if (isNaN(fechaInicio.getTime()) || isNaN(fechaFin.getTime())) {
+        return res.status(400).json({ message: 'Formato de fecha inválido en from o to' })
+      }
     }
 
     const agenda = await citaModel.getDoctorAgenda(medicoId, fechaInicio, fechaFin)
@@ -79,5 +87,25 @@ export async function actualizarCitaParcial(req: Request, res: Response) {
   } catch (error) {
     console.error('Error al actualizar la cita:', error)
     return res.status(500).json({ message: 'Error al actualizar la cita' })
+  }
+}
+
+//--------------------------- Obtener todas las citas ----------------------------------------
+export async function obtenerCitas(req: Request, res: Response) {
+  try {
+    const citas = await prisma.cita.findMany({
+      include: {
+        paciente: true,
+        medico: true
+      },
+      orderBy: {
+        fechaHora: 'asc' // Si tu campo de fecha tiene otro nombre (ej. fecha), cámbialo aquí
+      }
+    })
+
+    return res.status(200).json({ exito: true, datos: citas })
+  } catch (error) {
+    console.error('Error al obtener las citas:', error)
+    return res.status(500).json({ message: 'Error al consultar las citas' })
   }
 }
