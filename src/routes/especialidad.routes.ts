@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { 
   obtenerEspecialidades, 
-  crearEspecialidad 
+  crearEspecialidad, 
 } from '../controllers/especialidad.controller'
 // Si tus rutas de médicos/auth usan middleware de autenticación, puedes importarlo aquí:
 // import { verificarToken } from '../middlewares/auth.middleware'
