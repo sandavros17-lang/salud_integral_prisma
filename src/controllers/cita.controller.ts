@@ -3,12 +3,14 @@ import { citaSchema } from '../validators/cita.validator.js'
 import { citaModel } from '../models/cita.model.js'
 import { prisma } from '../config/prisma.js'
 
+//--------------------------- Agendar cita ----------------------------------------
+
 export async function crearCita(req: Request, res: Response) {
   try {
-    // 1. Validar los datos con Zod
+    // 1--Validar los datos con Zod
     const validData = citaSchema.parse(req.body)
 
-    // 2. Confirmar que el paciente existe
+    // 2--Confirmar que el paciente existe
     const pacienteExiste = await prisma.paciente.findUnique({
       where: { id: validData.pacienteId }
     })
@@ -16,7 +18,7 @@ export async function crearCita(req: Request, res: Response) {
       return res.status(404).json({ message: 'El paciente especificado no existe' })
     }
 
-    // 3. Confirmar que el médico existe
+    // 3--Confirmar que el médico existe    //findUnique busca un registro único en la tabla "medico" de la base de datos, utilizando el ID del médico proporcionado en los datos validados. Si no encuentra un médico con ese ID, devuelve null.
     const medicoExiste = await prisma.medico.findUnique({
       where: { id: validData.medicoId }
     })
@@ -24,7 +26,7 @@ export async function crearCita(req: Request, res: Response) {
       return res.status(404).json({ message: 'El médico especificado no existe' })
     }
 
-    // 4. Crear la cita (el estado nace en PROGRAMADA por defecto)
+    // 4--Crear la cita (el estado nace en PROGRAMADA por defecto)
     const nuevaCita = await citaModel.createCita(validData)
     
     return res.status(201).json({ exito: true, datos: nuevaCita })
