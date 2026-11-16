@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 
+//autenticacion y validacion con el role 
 export interface AuthPayload {
   id: number
   email: string
@@ -14,7 +15,7 @@ declare global {
     }
   }
 }
-
+//verificacion del token q se envia
 export function verifyToken(req: Request, res: Response, next: NextFunction) {
   const header = req.headers.authorization
   if (!header || !header.startsWith('Bearer ')) {

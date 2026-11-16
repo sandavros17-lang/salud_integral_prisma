@@ -1,30 +1,12 @@
-import swaggerJsdoc from 'swagger-jsdoc'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-const options: swaggerJsdoc.Options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'API Clínica Salud Integral',
-      version: '1.0.0',
-      description: 'Documentación del sistema de gestión médica para citas y reportes gerenciales',
-    },
-    servers: [
-      {
-        url: 'http://localhost:3000/api',
-        description: 'Servidor de Desarrollo',
-      },
-    ],
-    components: {
-      securitySchemes: {
-        BearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-        },
-      },
-    },
-  },
-  apis: ['./src/routes/*.ts'], // Lee automáticamente las anotaciones JSDoc en tus rutas
-}
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-export const swaggerSpec = swaggerJsdoc(options)
+// Ruta absoluta hacia el archivo JSON con la documentación centralizada
+const swaggerPath = path.join(__dirname, 'swagger-output.json')
+
+// Exportamos directamente el objeto JSON parseado para que Swagger UI lo lea sin usar JSDoc
+export const swaggerSpec = JSON.parse(fs.readFileSync(swaggerPath, 'utf8'))

@@ -1,0 +1,95 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Clínica Salud Integral",
+    "version": "1.0.0",
+    "description": "Documentación del sistema de gestión médica para citas y reportes gerenciales"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Servidor de Desarrollo"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "summary": "Iniciar sesión y obtener token JWT",
+        "tags": ["Autenticación"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "correo": { "type": "string", "example": "correo@clinica.com" },
+                  "password": { "type": "string", "example": "123456" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Login exitoso, retorna el token" },
+          "401": { "description": "Credenciales inválidas" }
+        }
+      }
+    },
+    "/citas": {
+      "get": {
+        "summary": "Obtener todas las citas",
+        "tags": ["Citas"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Lista de citas obtenida con éxito" }
+        }
+      },
+      "post": {
+        "summary": "Crear una nueva cita médica",
+        "tags": ["Citas"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pacienteId": { "type": "string", "example": "uuid-paciente" },
+                  "medicoId": { "type": "string", "example": "uuid-medico" },
+                  "fechaHora": { "type": "string", "example": "2026-11-20T10:00:00Z" },
+                  "motivo": { "type": "string", "example": "Control general" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Cita creada exitosamente" },
+          "400": { "description": "Datos inválidos" }
+        }
+      }
+    },
+    "/reports/gerencia": {
+      "get": {
+        "summary": "Obtener reporte gerencial",
+        "tags": ["Reportes"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Reporte generado con éxito" },
+          "403": { "description": "Acceso denegado (Requiere rol GERENCIA)" }
+        }
+      }
+    }
+  }
+}

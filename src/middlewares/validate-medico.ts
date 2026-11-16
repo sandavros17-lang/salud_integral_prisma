@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { z } from 'zod'
 
+// --------------------validacion de los datos del medico q se envia en el body-------------------
 export const esquemaMedico = z.object({
   documentoIdentidad: z.string().min(1, 'El documento de identidad es obligatorio'),
   nombre: z.string().min(1, 'El nombre es obligatorio'),
