@@ -19,9 +19,9 @@ app.use('/api', citaRutas)
 app.use('/api', reporteRutas)
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)) //URL para ver la documentacion de swagger
 
-console.log('>>> Intentando arrancar el servidor...')
 
-// ... (aquí va tu app.listen)
+
+// para correr el servidor
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {

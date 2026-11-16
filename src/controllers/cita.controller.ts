@@ -18,7 +18,7 @@ export async function crearCita(req: Request, res: Response) {
       return res.status(404).json({ message: 'El paciente especificado no existe' })
     }
 
-    // 3--Confirmar que el médico existe    //findUnique busca un registro único en la tabla "medico" de la base de datos, utilizando el ID del médico proporcionado en los datos validados. Si no encuentra un médico con ese ID, devuelve null.
+    // 3--Confirmar que el médico existe    //findUnique busca un registro único en la tabla medico de la base de datos, utilizando el ID del médico proporcionado en los datos validados. Si no encuentra un médico con ese ID, devuelve null.
     const medicoExiste = await prisma.medico.findUnique({
       where: { id: validData.medicoId }
     })
@@ -39,7 +39,7 @@ export async function crearCita(req: Request, res: Response) {
   }
 }
 
-// Nueva función añadida para la Parte 2 (Agenda del médico por rango de fechas)
+//----------------Agenda del médico por rango de fechas----------------------------------
 export async function obtenerAgendaMedico(req: Request, res: Response) {
   try {
     const medicoId = Number(req.params.id)
@@ -62,13 +62,13 @@ export async function obtenerAgendaMedico(req: Request, res: Response) {
   }
 }
 
-// Nueva función para la Parte 3 (Actualización parcial de la cita)
+//--------------------------------Actualización parcial de la cita---------------------------------
 export async function actualizarCitaParcial(req: Request, res: Response) {
   try {
     const id = Number(req.params.id)
     const datosActualizar = req.body
 
-    // Si viene fechaHora en el body, la convertimos a objeto Date
+    // Si viene fechaHora en el body, la convertimos a Date
     if (datosActualizar.fechaHora) {
       datosActualizar.fechaHora = new Date(datosActualizar.fechaHora)
     }

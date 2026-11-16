@@ -40,7 +40,7 @@ export const pacienteController = {
     }
   },
 
-  // POST /api/paciente
+  // POST /api/paciente ------crea paciente nuevo en la BD
   async crearPaciente(req: Request, res: Response) {
     try {
       const { documentoIdentidad, correo, fechaNacimiento, ...restoDatos } = req.body

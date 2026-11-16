@@ -3,7 +3,7 @@ import { medicoModel } from '../models/medico.model.ts'
 
 export const medicoController = {
 
-  // GET /api/medico - Lista todos los médicos o filtra por especialidad si viene el query param
+  // GET /api/medico - Lista todos los médicos o filtra por especialidad si viene el query param (parametro de consulta)
   async listarMedicos(req: Request, res: Response) {
     try {
       // Capturamos el parámetro ?specialty= de la URL (si es que viene)
@@ -45,7 +45,7 @@ export const medicoController = {
     }
   },
 
-  // POST /api/medico - Registra un nuevo médico validado
+  // POST /api/medico - Registra un nuevo médico validando los campos
   async crearMedico(req: Request, res: Response) {
     try {
       const { documentoIdentidad, correo, ...restoDatos } = req.body
